@@ -1,0 +1,33 @@
+
+/* Özelleştirilmiş Scrollbar (Webkit Tarayıcılar) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* 
+   PERFORMANS: Layout Containment 
+   Bu sınıf, tarayıcının ekran dışındaki öğelerin (öğrenci kartları vb.) 
+   yerleşimini hesaplamasını erteleyerek "Style & Layout" süresini düşürür.
+*/
+.content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 300px; /* Kartın tahmini yüksekliği */
+}
+
+.contain-paint {
+    contain: paint layout;
+}

@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <link rel="stylesheet" href="/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kitap Kurdu RPG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CDN ve Konfigürasyonu -->
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        quicksand: ['Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
+        /* Kritik CSS: Yükleme Ekranı */
+        .sk-container { min-height: 100vh; background-color: #f8fafc; display: flex; flex-direction: column; align-items: center; padding-top: 8rem; overflow: hidden; }
+        .sk-card { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 18rem; width: 15rem; padding: 1.5rem; border-radius: 3rem; border: 4px solid #fbbf24; background: linear-gradient(to bottom right, #fffbeb, #fef3c7); box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), 0 25px 50px -12px rgba(0, 0, 0, 0.25); margin-bottom: 2rem; }
+        .sk-avatar-box { position: absolute; top: -3rem; left: 50%; transform: translateX(-50%); }
+        .sk-avatar { width: 7rem; height: 7rem; background-color: #e2e8f0; border-radius: 2rem; border: 4px solid #fff; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+        .sk-badge { background-color: #4f46e5; padding: 0.5rem 1.25rem; border-radius: 1rem; box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); margin-bottom: 1rem; }
+        .sk-text { font-size: 0.875rem; font-weight: 900; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #6366f1, 0 0 30px #6366f1; letter-spacing: 0.05em; text-transform: uppercase; }
+        .sk-nav { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); width: 92%; max-width: 72rem; z-index: 40; }
+        .sk-nav-inner { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border-radius: 2rem; padding: 0 1.5rem; height: 5rem; display: flex; align-items: center; }
+        .sk-logo { width: 3rem; height: 3rem; background-color: #4f46e5; border-radius: 1rem; opacity: 0.2; }
+    </style>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.3/",
+        "react": "https://esm.sh/react@^19.2.3",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+        "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
+        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+        "firebase/": "https://esm.sh/firebase@^12.7.0/",
+        "vite": "https://esm.sh/vite@^7.3.0",
+        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
+      }
+    }
+    </script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+    <div id="root">
+        <div class="sk-container">
+            <nav class="sk-nav">
+                <div class="sk-nav-inner">
+                    <div class="sk-logo"></div>
+                </div>
+            </nav>
+            <div class="sk-card">
+                <div class="sk-avatar-box">
+                    <div class="sk-avatar"></div>
+                </div>
+                <div class="sk-badge">
+                    <span class="sk-text">Yükleniyor...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="./index.tsx"></script>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>
