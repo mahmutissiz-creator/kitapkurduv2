@@ -5,12 +5,13 @@ import { MOCK_STUDENTS } from './data';
 import { Student, LeaderboardCategory, StageImages, EVOLUTION_STAGES, LevelInfo } from './types';
 import ChampionCard from './components/ChampionCard';
 import StudentCard from './components/StudentCard';
-import StudentModal from './components/StudentModal';
+// StudentModal lazy load edilecek
 import type { User } from 'firebase/auth';
 import { throttle } from './utils/helpers'; // Helper import
 
 // Code Splitting
 const TeacherPanel = React.lazy(() => import('./components/TeacherPanel'));
+const StudentModal = React.lazy(() => import('./components/StudentModal'));
 
 import {
   BookMarked, Search, Trophy, Settings, LayoutDashboard, Sparkles,
@@ -694,17 +695,19 @@ const App: React.FC = () => {
         )}
       </main>
 
-      <AnimatePresence>
-        {selectedStudent && (
-          <StudentModal
-            student={selectedStudent}
-            stages={stages}
-            stageImages={stageImages}
-            onClose={() => setSelectedStudent(null)}
-            totalScore={getCalculatedScore(selectedStudent)}
-          />
-        )}
-      </AnimatePresence>
+      <Suspense fallback={null}>
+        <AnimatePresence>
+          {selectedStudent && (
+            <StudentModal
+              student={selectedStudent}
+              stages={stages}
+              stageImages={stageImages}
+              onClose={() => setSelectedStudent(null)}
+              totalScore={getCalculatedScore(selectedStudent)}
+            />
+          )}
+        </AnimatePresence>
+      </Suspense>
     </div>
   );
 };

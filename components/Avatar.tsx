@@ -8,15 +8,17 @@ interface AvatarProps {
   fontSize?: string;
   fetchPriority?: "high" | "low" | "auto";
   loading?: "eager" | "lazy";
+  size?: number; // Genişlik/Yükseklik bilgisi (CLS için)
 }
 
-const Avatar: React.FC<AvatarProps> = ({ 
-  name, 
-  src, 
-  className = "w-12 h-12", 
+const Avatar: React.FC<AvatarProps> = ({
+  name,
+  src,
+  className = "w-12 h-12",
   fontSize = "text-xl",
   fetchPriority = "auto",
-  loading = "lazy"
+  loading = "lazy",
+  size = 112
 }) => {
   // Hesaplamayı sadece isim değişirse yap (Memoization)
   const initials = useMemo(() => {
@@ -25,7 +27,7 @@ const Avatar: React.FC<AvatarProps> = ({
 
   const bgColor = useMemo(() => {
     const colors = [
-      'bg-indigo-500', 'bg-rose-500', 'bg-amber-500', 'bg-emerald-500', 
+      'bg-indigo-500', 'bg-rose-500', 'bg-amber-500', 'bg-emerald-500',
       'bg-sky-500', 'bg-purple-500', 'bg-pink-500', 'bg-orange-500'
     ];
     let hash = 0;
@@ -38,13 +40,16 @@ const Avatar: React.FC<AvatarProps> = ({
   if (src) {
     return (
       <div className={`${className} overflow-hidden rounded-3xl border-4 border-white shadow-md bg-slate-100`}>
-        <img 
-          src={src} 
-          alt={name} 
+        <img
+          src={src}
+          alt={`${name} Avatar`}
+          width={size}
+          height={size}
           className="w-full h-full object-cover"
           loading={loading}
-          // @ts-ignore - React type definitions might miss fetchPriority occasionally
-          fetchPriority={fetchPriority}
+          // @ts-ignore
+          fetchpriority={fetchPriority}
+          decoding="async"
           onError={(e) => {
             (e.target as HTMLImageElement).style.display = 'none';
           }}
