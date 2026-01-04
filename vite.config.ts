@@ -12,7 +12,9 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'firebase-vendor': ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          'firebase-auth': ['firebase/auth'],
+          'firebase-firestore': ['firebase/firestore'],
+          'firebase-app': ['firebase/app'],
           'framer-vendor': ['framer-motion'],
           'ui-vendor': ['lucide-react']
         }

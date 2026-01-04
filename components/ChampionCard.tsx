@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Student, LeaderboardCategory, LevelInfo, StageImages } from '../types';
 import { getLevelInfo } from '../utils/levelCalculator';
 import Avatar from './Avatar';
@@ -51,8 +51,7 @@ const ChampionCard: React.FC<ChampionCardProps> = ({ student, rank, category, st
   const config = rankConfig[rank];
 
   return (
-    <motion.div
-      // PERFORMANS: layout ve spring animasyonları kaldırıldı
+    <m.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: "easeOut" }}
@@ -95,7 +94,7 @@ const ChampionCard: React.FC<ChampionCardProps> = ({ student, rank, category, st
         <span>{config.icon}</span>
         <span>#{rank}</span>
       </div>
-    </motion.div>
+    </m.div>
   );
 };
 

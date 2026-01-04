@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { Student, StageImages, LevelInfo } from '../types';
 import { getLevelInfo, getProgressToNextLevel } from '../utils/levelCalculator';
 import Avatar from './Avatar';
@@ -53,13 +53,13 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.9, y: 20 }}
         className="bg-white rounded-[2.5rem] w-full max-w-md overflow-hidden shadow-2xl relative"
       >
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 bg-white/80 hover:bg-white rounded-full transition-colors z-20 shadow-sm"
         >
@@ -68,12 +68,12 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
 
         <div className="h-48 bg-indigo-600 flex items-center justify-center relative overflow-hidden">
           <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent animate-pulse" />
-          
+
           {customImage ? (
-            <motion.img 
+            <m.img
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              src={customImage} 
+              src={customImage}
               className="w-full h-full object-cover"
               alt={level.title}
             />
@@ -82,34 +82,34 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
               {level.icon}
             </div>
           )}
-          
+
           <div className="absolute -bottom-8 w-20 h-20 rounded-2xl bg-white p-1 shadow-lg border-2 border-white">
-            <Avatar 
-              name={student.name} 
+            <Avatar
+              name={student.name}
               src={customImage}
-              className="w-full h-full rounded-xl" 
-              fontSize="text-2xl" 
+              className="w-full h-full rounded-xl"
+              fontSize="text-2xl"
             />
           </div>
         </div>
 
         <div className="px-6 pt-12 pb-8 text-center">
           <h2 className="text-2xl font-black text-slate-800 mb-1">{student.name}</h2>
-          
+
           <div className="flex flex-col items-center gap-3 mb-6">
             <span className={`text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full ${level.bgClass} ${level.color} shadow-sm border border-current/10`}>
               {level.icon} {level.title}
             </span>
-            
+
             <div className="flex gap-4 w-full">
-               <div className="flex-1 bg-slate-50 p-2 rounded-xl border border-slate-100">
-                  <p className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">Toplam Puan</p>
-                  <p className="text-lg font-black text-indigo-600">{totalScore}</p>
-               </div>
-               <div className="flex-1 bg-purple-50 p-2 rounded-xl border border-purple-100">
-                  <p className="text-[8px] font-black text-purple-400 uppercase tracking-tighter">Bonus/Görev</p>
-                  <p className="text-lg font-black text-purple-600">+{student.bonusScore || 0}</p>
-               </div>
+              <div className="flex-1 bg-slate-50 p-2 rounded-xl border border-slate-100">
+                <p className="text-[8px] font-black text-slate-400 uppercase tracking-tighter">Toplam Puan</p>
+                <p className="text-lg font-black text-indigo-600">{totalScore}</p>
+              </div>
+              <div className="flex-1 bg-purple-50 p-2 rounded-xl border border-purple-100">
+                <p className="text-[8px] font-black text-purple-400 uppercase tracking-tighter">Bonus/Görev</p>
+                <p className="text-lg font-black text-purple-600">+{student.bonusScore || 0}</p>
+              </div>
             </div>
           </div>
 
@@ -120,9 +120,9 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
               </p>
               <p className="text-[10px] font-black text-indigo-600">%{Math.round(progress)}</p>
             </div>
-            
+
             <div className="h-3 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
-              <div 
+              <div
                 className="h-full bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full shadow-sm transition-all duration-1000 ease-out"
                 style={{ width: `${progressWidth}%` }}
               />
@@ -157,7 +157,7 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
                 )) : <span className="text-[9px] font-bold text-slate-300 italic">Boş...</span>}
               </div>
             </div>
-            
+
             <div className="bg-slate-50 p-3 rounded-2xl border border-slate-100 text-left">
               <h4 className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-2 flex items-center gap-1">
                 <Star size={10} className="text-amber-400" /> ROZETLER
@@ -173,7 +173,7 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
             </div>
           </div>
         </div>
-      </motion.div>
+      </m.div>
     </div>
   );
 };

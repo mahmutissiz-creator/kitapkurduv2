@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo, useEffect, Suspense, useRef, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { m, AnimatePresence } from 'framer-motion';
 import { MOCK_STUDENTS } from './data';
 import { Student, LeaderboardCategory, StageImages, EVOLUTION_STAGES, LevelInfo } from './types';
 import ChampionCard from './components/ChampionCard';
@@ -26,6 +26,7 @@ const App: React.FC = () => {
   const [category, setCategory] = useState<LeaderboardCategory>('weekly');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [internalAuthChecked, setInternalAuthChecked] = useState(false);
 
   // Auth States
   const [user, setUser] = useState<User | null>(null);
@@ -57,6 +58,17 @@ const App: React.FC = () => {
     firestoreModule: any;
   } | null>(null);
 
+  // --- SDK MODÜLLERİNİ ERTELEYEREK YÜKLE ---
+  const loadAuthModule = async () => {
+    if (firebaseRefs.current?.authModule) return firebaseRefs.current;
+
+    // Auth paketleri (90KB+) sadece öğretmen paneline girerken yüklenir
+    const fb = await getFirebase();
+    firebaseRefs.current = fb;
+    setIsConnectionReady(true);
+    return fb;
+  };
+
   // --- MEMOIZED HANDLERS (Strict Component Memoization için) ---
   const handleStudentClick = useCallback((student: Student) => {
     setSelectedStudent(student);
@@ -75,26 +87,16 @@ const App: React.FC = () => {
 
     runOnIdle(async () => {
       try {
+        // İlk açılışta sadece Firestore (Veriler) yüklenir
         const fb = await getFirebase();
-        firebaseRefs.current = fb;
-        setIsConnectionReady(true);
+        firebaseRefs.current = {
+          ...fb,
+          authModule: null, // Önden yükleme
+          auth: null
+        };
 
-        fb.authModule.onAuthStateChanged(fb.auth, async (currentUser: User | null) => {
-          setUser(currentUser);
-          if (currentUser && currentUser.email) {
-            try {
-              const adminDocRef = fb.firestoreModule.doc(fb.db, "admins", currentUser.email);
-              const adminSnap = await fb.firestoreModule.getDoc(adminDocRef);
-              setIsAdmin(adminSnap.exists());
-            } catch (error) {
-              console.error("Yetki hatası:", error);
-              setIsAdmin(false);
-            }
-          } else {
-            setIsAdmin(false);
-          }
-          setAuthLoading(false);
-        });
+        // Sadece firestore dinleyicilerini başlatmak için yeterli
+        setIsConnectionReady(true);
 
       } catch (e) {
         console.error("Firebase yükleme hatası:", e);
@@ -366,7 +368,22 @@ const App: React.FC = () => {
               <span className="hidden md:inline">Liderlik</span>
             </button>
             <button
-              onClick={() => setView('teacher')}
+              onClick={async () => {
+                setView('teacher');
+                if (!internalAuthChecked) {
+                  const fb = await loadAuthModule();
+                  fb.authModule.onAuthStateChanged(fb.auth, async (currentUser: any) => {
+                    setUser(currentUser);
+                    if (currentUser?.email) {
+                      const adminDocRef = fb.firestoreModule.doc(fb.db, "admins", currentUser.email);
+                      const adminSnap = await fb.firestoreModule.getDoc(adminDocRef);
+                      setIsAdmin(adminSnap.exists());
+                    }
+                    setAuthLoading(false);
+                    setInternalAuthChecked(true);
+                  });
+                }
+              }}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-sm ${view === 'teacher' ? 'bg-white text-indigo-600 shadow-md shadow-indigo-200 ring-1 ring-indigo-50' : 'text-slate-500 hover:bg-white/50 hover:text-indigo-500'}`}
             >
               <Settings size={18} />
@@ -379,7 +396,7 @@ const App: React.FC = () => {
       <main className="max-w-7xl mx-auto px-6 mt-32 relative z-10 pb-20">
 
         {isDemoMode && (
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded-2xl flex items-center justify-center gap-3 shadow-sm mx-auto max-w-2xl"
@@ -392,7 +409,7 @@ const App: React.FC = () => {
               <br />
               <span className="text-xs opacity-80">Firebase Console {'>'} Firestore Database {'>'} Rules ayarlarını kontrol ediniz.</span>
             </div>
-          </motion.div>
+          </m.div>
         )}
 
         {dataLoading && isConnectionReady && (
@@ -412,13 +429,13 @@ const App: React.FC = () => {
             {view === 'home' ? (
               <>
                 <div className="text-center mb-16 relative">
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="inline-flex items-center gap-2 bg-indigo-50/80 backdrop-blur border border-indigo-100 px-4 py-1.5 rounded-full text-indigo-600 text-xs font-black uppercase tracking-widest mb-4 shadow-sm"
                   >
                     <Sparkles size={14} /> Okuma Seviyesi: Efsanevi
-                  </motion.div>
+                  </m.div>
                   <h2 className="text-4xl md:text-5xl font-black text-slate-800 tracking-tight mb-2 drop-shadow-sm">
                     Macera Seni Bekliyor!
                   </h2>
@@ -439,7 +456,7 @@ const App: React.FC = () => {
 
                     <div className="flex flex-col items-center justify-center w-full px-4">
                       <AnimatePresence mode="wait">
-                        <motion.div
+                        <m.div
                           key={students.length}
                           initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -485,7 +502,7 @@ const App: React.FC = () => {
                               />
                             </div>
                           )}
-                        </motion.div>
+                        </m.div>
                       </AnimatePresence>
                     </div>
                   </section>
@@ -552,7 +569,7 @@ const App: React.FC = () => {
             ) : (
               <div className="pt-4">
                 {!user ? (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="max-w-md mx-auto"
@@ -624,9 +641,9 @@ const App: React.FC = () => {
                         </form>
                       </div>
                     </div>
-                  </motion.div>
+                  </m.div>
                 ) : !isAdmin ? (
-                  <motion.div
+                  <m.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     className="max-w-md mx-auto text-center bg-white p-8 rounded-[2.5rem] shadow-xl border border-rose-100"
@@ -644,7 +661,7 @@ const App: React.FC = () => {
                     >
                       Çıkış Yap
                     </button>
-                  </motion.div>
+                  </m.div>
                 ) : (
                   <>
                     <div className="flex justify-between items-center mb-8 px-2">
@@ -706,3 +723,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+
