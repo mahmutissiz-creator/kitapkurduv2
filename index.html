@@ -1,29 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <link rel="stylesheet" href="/style.css">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>Kitap Kurdu RPG</title>
+    
+    <!-- Fontlar -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CDN ve Konfigürasyonu -->
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        quicksand: ['Quicksand', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
         body { font-family: 'Quicksand', sans-serif; background-color: #f8fafc; margin: 0; padding: 0; }
         /* Kritik CSS: Yükleme Ekranı */
@@ -37,22 +23,6 @@
         .sk-nav-inner { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); border-radius: 2rem; padding: 0 1.5rem; height: 5rem; display: flex; align-items: center; }
         .sk-logo { width: 3rem; height: 3rem; background-color: #4f46e5; border-radius: 1rem; opacity: 0.2; }
     </style>
-
-    <script type="importmap">
-    {
-      "imports": {
-        "react/": "https://esm.sh/react@^19.2.3/",
-        "react": "https://esm.sh/react@^19.2.3",
-        "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-        "framer-motion": "https://esm.sh/framer-motion@^12.23.26",
-        "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
-        "firebase/": "https://esm.sh/firebase@^12.7.0/",
-        "vite": "https://esm.sh/vite@^7.3.0",
-        "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2"
-      }
-    }
-    </script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root">
@@ -72,7 +42,6 @@
             </div>
         </div>
     </div>
-    <script type="module" src="./index.tsx"></script>
-<script type="module" src="/index.tsx"></script>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
