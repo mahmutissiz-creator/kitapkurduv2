@@ -1,13 +1,13 @@
 
 import React, { useState } from 'react';
 import { Student, LevelInfo, StageImages } from '../types';
-import { 
-  Plus, 
-  Trash2, 
-  Eye, 
-  EyeOff, 
-  Image as ImageIcon, 
-  Award, 
+import {
+  Plus,
+  Trash2,
+  Eye,
+  EyeOff,
+  Image as ImageIcon,
+  Award,
   Layout,
   RefreshCcw,
   FileText,
@@ -38,13 +38,13 @@ interface TeacherPanelProps {
   isDemoMode: boolean;
 }
 
-const TeacherPanel: React.FC<TeacherPanelProps> = ({ 
-  students, 
+const TeacherPanel: React.FC<TeacherPanelProps> = ({
+  students,
   addStudent,
   removeStudent,
   updateStudent,
   resetStudents,
-  stageImages, 
+  stageImages,
   setStageImages,
   stages,
   setStages,
@@ -54,7 +54,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
 }) => {
   const [newStudentName, setNewStudentName] = useState('');
   const [uploadingStageId, setUploadingStageId] = useState<number | null>(null);
-  const [urlInputs, setUrlInputs] = useState<{[key: number]: string}>({});
+  const [urlInputs, setUrlInputs] = useState<{ [key: number]: string }>({});
 
   const onAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,7 +103,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           ctx?.drawImage(img, 0, 0, width, height);
-          
+
           // JPEG formatında ve 0.7 kalitesinde sıkıştır
           const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
           resolve(dataUrl);
@@ -128,10 +128,10 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
     try {
       // Resmi sıkıştır ve Base64 string'e çevir
       const base64String = await compressImage(file);
-      
+
       // State'i güncelle (Bu işlem App.tsx üzerinden Firestore'a da kaydeder)
       setStageImages({ ...stageImages, [stageId]: base64String });
-      
+
     } catch (error: any) {
       console.error("Resim işleme hatası:", error);
       alert("Resim işlenirken bir hata oluştu.");
@@ -145,14 +145,14 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
   const handleUrlSubmit = (stageId: number) => {
     const url = urlInputs[stageId];
     if (!url) return;
-    
+
     setStageImages({ ...stageImages, [stageId]: url });
     setUrlInputs({ ...urlInputs, [stageId]: '' });
   };
 
   // Seviye ayarlarını güncelleme fonksiyonu
   const handleStageUpdate = (id: number, field: keyof LevelInfo, value: any) => {
-    const newStages = stages.map(stage => 
+    const newStages = stages.map(stage =>
       stage.id === id ? { ...stage, [field]: value } : stage
     );
     setStages(newStages);
@@ -163,7 +163,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
     const lastStage = stages[stages.length - 1];
     const newId = stages.length > 0 ? Math.max(...stages.map(s => s.id)) + 1 : 1;
     const startBook = lastStage ? lastStage.maxBooks + 1 : 0;
-    
+
     const newStage: LevelInfo = {
       id: newId,
       title: 'YENİ SEVİYE',
@@ -198,7 +198,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
           <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
             <Layout className="text-indigo-500" /> Ayarlar
           </h3>
-          <button 
+          <button
             type="button"
             onClick={() => window.confirm("Tüm verileri sıfırlamak istediğinize emin misiniz?") && resetStudents()}
             className="flex items-center gap-2 px-4 py-2 bg-rose-50 text-rose-600 rounded-xl hover:bg-rose-600 hover:text-white transition-all font-bold text-xs"
@@ -206,13 +206,13 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
             <RefreshCcw size={14} /> Sistemi Sıfırla
           </button>
         </div>
-        
+
         <div className="flex items-center justify-between p-5 bg-slate-50 rounded-2xl border border-slate-100">
           <div>
             <h4 className="font-bold text-slate-800">Podyumu Göster</h4>
             <p className="text-xs text-slate-500">İlk 3 kişiyi özel kartlarla vurgular.</p>
           </div>
-          <button 
+          <button
             type="button"
             onClick={() => setShowPodium(!showPodium)}
             className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${showPodium ? 'bg-indigo-600' : 'bg-slate-300'}`}
@@ -228,16 +228,19 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
           <h3 className="text-xl font-black text-slate-800 flex items-center gap-2">
             <Award className="text-amber-500" /> Kahramanlar
           </h3>
-          
+
           <form onSubmit={onAddSubmit} className="flex gap-2">
-            <input 
-              type="text" 
+            <label htmlFor="new-student-name" className="sr-only">Yeni Öğrenci İsmi</label>
+            <input
+              id="new-student-name"
+              name="student-name"
+              type="text"
               placeholder="Yeni İsim..."
               value={newStudentName}
               onChange={(e) => setNewStudentName(e.target.value)}
               className="px-5 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-bold w-full md:w-64 outline-none focus:ring-2 ring-indigo-500/20"
             />
-            <button 
+            <button
               type="submit"
               className="bg-indigo-600 text-white px-6 py-3 rounded-2xl hover:bg-indigo-700 shadow-lg flex items-center gap-2 active:scale-95 transition-all"
             >
@@ -285,7 +288,10 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                     </div>
                   </td>
                   <td className="p-5 text-center">
-                    <input 
+                    <label htmlFor={`bonus-${student.id}`} className="sr-only">Bonus Puan</label>
+                    <input
+                      id={`bonus-${student.id}`}
+                      name={`bonus-${student.id}`}
                       type="number"
                       value={student.bonusScore || 0}
                       onChange={(e) => updateStudent(student.id, { bonusScore: parseInt(e.target.value) || 0 })}
@@ -294,15 +300,15 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                   </td>
                   <td className="p-5 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button 
+                      <button
                         type="button"
-                        onClick={() => updateStudent(student.id, { isVisible: !student.isVisible })} 
+                        onClick={() => updateStudent(student.id, { isVisible: !student.isVisible })}
                         className={`p-2.5 rounded-xl border transition-all ${student.isVisible ? 'text-emerald-500 bg-emerald-50 border-emerald-100' : 'text-slate-400 bg-slate-100 border-slate-200'}`}
                         title={student.isVisible ? "Gizle" : "Göster"}
                       >
                         {student.isVisible ? <Eye size={18} /> : <EyeOff size={18} />}
                       </button>
-                      <button 
+                      <button
                         type="button"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -336,8 +342,8 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6">
           {stages.map((stage) => (
             <div key={stage.id} className="bg-white p-4 rounded-[2rem] border border-slate-100 shadow-sm hover:shadow-md transition-all hover:-translate-y-1 relative group">
-              
-              <button 
+
+              <button
                 type="button"
                 onClick={() => handleRemoveStage(stage.id)}
                 className="absolute -top-2 -right-2 w-8 h-8 bg-rose-50 text-rose-500 rounded-full border border-rose-100 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-rose-500 hover:text-white cursor-pointer"
@@ -358,15 +364,18 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                 ) : (
                   <div className="text-center"><div className="text-3xl">{stage.icon}</div></div>
                 )}
-                
+
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white text-xs font-bold pointer-events-none p-2 text-center">
                   <span>Değiştirmek için tıkla</span>
                 </div>
-                
-                <input 
-                  type="file" 
-                  accept="image/*" 
-                  className="absolute inset-0 opacity-0 cursor-pointer" 
+
+                <label htmlFor={`file-upload-${stage.id}`} className="sr-only">Resim Yükle</label>
+                <input
+                  id={`file-upload-${stage.id}`}
+                  name={`file-upload-${stage.id}`}
+                  type="file"
+                  accept="image/*"
+                  className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={(e) => handleFileUpload(stage.id, e)}
                   disabled={uploadingStageId !== null}
                 />
@@ -374,26 +383,32 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
 
               {/* URL Input (Alternatif Yükleme) */}
               <div className="mb-3 flex gap-1">
-                 <input 
-                    type="text" 
-                    placeholder="veya resim linki..." 
-                    className="w-full text-[9px] bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-indigo-500"
-                    value={urlInputs[stage.id] || ''}
-                    onChange={(e) => setUrlInputs({...urlInputs, [stage.id]: e.target.value})}
-                 />
-                 <button 
-                    onClick={() => handleUrlSubmit(stage.id)}
-                    disabled={!urlInputs[stage.id]}
-                    className="bg-indigo-100 text-indigo-600 rounded-lg px-2 hover:bg-indigo-600 hover:text-white transition-colors disabled:opacity-50"
-                 >
-                    <LinkIcon size={10} />
-                 </button>
+                <label htmlFor={`url-input-${stage.id}`} className="sr-only">Resim URL</label>
+                <input
+                  id={`url-input-${stage.id}`}
+                  name={`url-input-${stage.id}`}
+                  type="text"
+                  placeholder="veya resim linki..."
+                  className="w-full text-[9px] bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 outline-none focus:border-indigo-500"
+                  value={urlInputs[stage.id] || ''}
+                  onChange={(e) => setUrlInputs({ ...urlInputs, [stage.id]: e.target.value })}
+                />
+                <button
+                  onClick={() => handleUrlSubmit(stage.id)}
+                  disabled={!urlInputs[stage.id]}
+                  className="bg-indigo-100 text-indigo-600 rounded-lg px-2 hover:bg-indigo-600 hover:text-white transition-colors disabled:opacity-50"
+                >
+                  <LinkIcon size={10} />
+                </button>
               </div>
 
               {/* Ayar Alanları */}
               <div className="space-y-3">
                 <div className="relative">
+                  <label htmlFor={`stage-title-${stage.id}`} className="sr-only">Seviye Adı</label>
                   <input
+                    id={`stage-title-${stage.id}`}
+                    name={`stage-title-${stage.id}`}
                     type="text"
                     value={stage.title}
                     onChange={(e) => handleStageUpdate(stage.id, 'title', e.target.value)}
@@ -405,18 +420,22 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
 
                 <div className="grid grid-cols-2 gap-2">
                   <div className="bg-slate-50 rounded-lg p-1.5 text-center border border-slate-100">
-                    <label className="block text-[8px] font-bold text-slate-400 mb-0.5">MİN</label>
-                    <input 
-                      type="number" 
+                    <label htmlFor={`min-books-${stage.id}`} className="block text-[8px] font-bold text-slate-400 mb-0.5">MİN</label>
+                    <input
+                      id={`min-books-${stage.id}`}
+                      name={`min-books-${stage.id}`}
+                      type="number"
                       value={stage.minBooks}
                       onChange={(e) => handleStageUpdate(stage.id, 'minBooks', parseInt(e.target.value) || 0)}
                       className="w-full bg-transparent text-center font-black text-xs text-indigo-600 outline-none"
                     />
                   </div>
                   <div className="bg-slate-50 rounded-lg p-1.5 text-center border border-slate-100">
-                    <label className="block text-[8px] font-bold text-slate-400 mb-0.5">MAX</label>
-                    <input 
-                      type="number" 
+                    <label htmlFor={`max-books-${stage.id}`} className="block text-[8px] font-bold text-slate-400 mb-0.5">MAX</label>
+                    <input
+                      id={`max-books-${stage.id}`}
+                      name={`max-books-${stage.id}`}
+                      type="number"
                       value={stage.maxBooks}
                       onChange={(e) => handleStageUpdate(stage.id, 'maxBooks', parseInt(e.target.value) || 0)}
                       className="w-full bg-transparent text-center font-black text-xs text-indigo-600 outline-none"
@@ -427,7 +446,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
             </div>
           ))}
 
-          <button 
+          <button
             type="button"
             onClick={handleAddStage}
             className="group relative aspect-square bg-slate-50 rounded-[2rem] border-2 border-dashed border-slate-300 flex flex-col items-center justify-center gap-2 hover:border-indigo-400 hover:bg-indigo-50/50 transition-all cursor-pointer"

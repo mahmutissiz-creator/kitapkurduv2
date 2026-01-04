@@ -596,8 +596,11 @@ const App: React.FC = () => {
 
                         <form onSubmit={handleEmailLogin} className="space-y-3">
                           <div className="relative">
+                            <label htmlFor="login-email" className="sr-only">E-posta Adresi</label>
                             <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
+                              id="login-email"
+                              name="email"
                               type="email"
                               placeholder="E-posta Adresi"
                               value={email}
@@ -606,8 +609,11 @@ const App: React.FC = () => {
                             />
                           </div>
                           <div className="relative">
+                            <label htmlFor="login-password" className="sr-only">Şifre</label>
                             <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                             <input
+                              id="login-password"
+                              name="password"
                               type="password"
                               placeholder="Şifre"
                               value={password}
