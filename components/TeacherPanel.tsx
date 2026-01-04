@@ -215,6 +215,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
           <button
             type="button"
             onClick={() => setShowPodium(!showPodium)}
+            aria-label={showPodium ? "Podyumu Kapat" : "Podyumu Aç"}
             className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${showPodium ? 'bg-indigo-600' : 'bg-slate-300'}`}
           >
             <span className={`${showPodium ? 'translate-x-7' : 'translate-x-1'} inline-block h-6 w-6 transform rounded-full bg-white shadow-md transition-transform`} />
@@ -272,19 +273,19 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                   </td>
                   <td className="p-5">
                     <div className="flex items-center justify-center gap-3 bg-white border border-slate-100 rounded-xl p-1 w-32 mx-auto">
-                      <button type="button" onClick={() => updateStudent(student.id, { booksRead: Math.max(0, student.booksRead - 1) })} className="w-8 h-8 rounded-lg bg-slate-50 text-slate-400 font-black hover:bg-rose-50">-</button>
+                      <button type="button" onClick={() => updateStudent(student.id, { booksRead: Math.max(0, student.booksRead - 1) })} aria-label="Kitap Sayısını Azalt" className="w-8 h-8 rounded-lg bg-slate-50 text-slate-400 font-black hover:bg-rose-50">-</button>
                       <span className="font-black text-indigo-600 text-lg w-8 text-center">{student.booksRead}</span>
-                      <button type="button" onClick={() => updateStudent(student.id, { booksRead: student.booksRead + 1 })} className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-black hover:bg-indigo-600 hover:text-white">+</button>
+                      <button type="button" onClick={() => updateStudent(student.id, { booksRead: student.booksRead + 1 })} aria-label="Kitap Sayısını Artır" className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 font-black hover:bg-indigo-600 hover:text-white">+</button>
                     </div>
                   </td>
                   <td className="p-5">
                     <div className="flex items-center justify-center gap-1">
-                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 5 })} className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all"><FileText size={18} /></button>
-                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 5 })} className="p-2.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100 hover:bg-amber-600 hover:text-white transition-all"><Star size={18} /></button>
-                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 3 })} className="p-2.5 bg-sky-50 text-sky-600 rounded-xl border border-sky-100 hover:bg-sky-600 hover:text-white transition-all"><Smile size={18} /></button>
+                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 5 })} aria-label="Özet Hazırlama Bonusu" className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl border border-emerald-100 hover:bg-emerald-600 hover:text-white transition-all"><FileText size={18} /></button>
+                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 5 })} aria-label="Ekstra Puan Bonusu" className="p-2.5 bg-amber-50 text-amber-600 rounded-xl border border-amber-100 hover:bg-amber-600 hover:text-white transition-all"><Star size={18} /></button>
+                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) + 3 })} aria-label="Davranış Bonusu" className="p-2.5 bg-sky-50 text-sky-600 rounded-xl border border-sky-100 hover:bg-sky-600 hover:text-white transition-all"><Smile size={18} /></button>
                       <div className="w-px h-6 bg-slate-200 mx-1" />
-                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) - 3 })} className="p-2.5 bg-orange-50 text-orange-600 rounded-xl border border-orange-100 hover:bg-orange-600 hover:text-white transition-all"><ShieldAlert size={18} /></button>
-                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) - 5 })} className="p-2.5 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 hover:bg-rose-600 hover:text-white transition-all"><MessageSquareX size={18} /></button>
+                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) - 3 })} aria-label="Geç Getirme Cezası" className="p-2.5 bg-orange-50 text-orange-600 rounded-xl border border-orange-100 hover:bg-orange-600 hover:text-white transition-all"><ShieldAlert size={18} /></button>
+                      <button type="button" onClick={() => updateStudent(student.id, { bonusScore: (student.bonusScore || 0) - 5 })} aria-label="Olumsuz Davranış Cezası" className="p-2.5 bg-rose-50 text-rose-600 rounded-xl border border-rose-100 hover:bg-rose-600 hover:text-white transition-all"><MessageSquareX size={18} /></button>
                     </div>
                   </td>
                   <td className="p-5 text-center">
@@ -305,6 +306,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                         onClick={() => updateStudent(student.id, { isVisible: !student.isVisible })}
                         className={`p-2.5 rounded-xl border transition-all ${student.isVisible ? 'text-emerald-500 bg-emerald-50 border-emerald-100' : 'text-slate-400 bg-slate-100 border-slate-200'}`}
                         title={student.isVisible ? "Gizle" : "Göster"}
+                        aria-label={student.isVisible ? "Gizle" : "Göster"}
                       >
                         {student.isVisible ? <Eye size={18} /> : <EyeOff size={18} />}
                       </button>
@@ -316,6 +318,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                         }}
                         className="p-2.5 text-rose-500 bg-rose-50 rounded-xl border border-rose-100 hover:bg-rose-600 hover:text-white active:scale-90 transition-all cursor-pointer"
                         title="Öğrenciyi Sil"
+                        aria-label={`${student.name} isimli öğrenciyi sil`}
                       >
                         <Trash2 size={18} />
                       </button>
@@ -348,6 +351,7 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                 onClick={() => handleRemoveStage(stage.id)}
                 className="absolute -top-2 -right-2 w-8 h-8 bg-rose-50 text-rose-500 rounded-full border border-rose-100 flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity z-10 hover:bg-rose-500 hover:text-white cursor-pointer"
                 title="Seviyeyi Sil"
+                aria-label={`Seviye ${stage.id} sil`}
               >
                 <Trash2 size={14} />
               </button>
@@ -394,7 +398,9 @@ const TeacherPanel: React.FC<TeacherPanelProps> = ({
                   onChange={(e) => setUrlInputs({ ...urlInputs, [stage.id]: e.target.value })}
                 />
                 <button
+                  type="button"
                   onClick={() => handleUrlSubmit(stage.id)}
+                  aria-label="URL'den Resim Yükle"
                   disabled={!urlInputs[stage.id]}
                   className="bg-indigo-100 text-indigo-600 rounded-lg px-2 hover:bg-indigo-600 hover:text-white transition-colors disabled:opacity-50"
                 >

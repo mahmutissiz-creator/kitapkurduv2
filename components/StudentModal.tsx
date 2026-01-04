@@ -61,6 +61,7 @@ const StudentModal: React.FC<StudentModalProps> = ({ student, stageImages, stage
       >
         <button
           onClick={onClose}
+          aria-label="Kapat"
           className="absolute top-4 right-4 p-2 bg-white/80 hover:bg-white rounded-full transition-colors z-20 shadow-sm"
         >
           <X size={18} />

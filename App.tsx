@@ -362,6 +362,7 @@ const App: React.FC = () => {
           <div className="flex items-center gap-3 bg-slate-100/50 p-1.5 rounded-2xl border border-white/50">
             <button
               onClick={() => setView('home')}
+              aria-label="Liderlik Tablosunu Görüntüle"
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-sm ${view === 'home' ? 'bg-white text-indigo-600 shadow-md shadow-indigo-200 ring-1 ring-indigo-50' : 'text-slate-500 hover:bg-white/50 hover:text-indigo-500'}`}
             >
               <LayoutDashboard size={18} />
@@ -384,6 +385,7 @@ const App: React.FC = () => {
                   });
                 }
               }}
+              aria-label="Öğretmen Paneli"
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all font-bold text-sm ${view === 'teacher' ? 'bg-white text-indigo-600 shadow-md shadow-indigo-200 ring-1 ring-indigo-50' : 'text-slate-500 hover:bg-white/50 hover:text-indigo-500'}`}
             >
               <Settings size={18} />
