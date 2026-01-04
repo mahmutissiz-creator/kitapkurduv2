@@ -1,6 +1,6 @@
 
 // PERFORMANS: SDK'ları statik olarak import etmiyoruz.
-// Sadece tipleri alıyoruz, böylece build boyutunu şişirmiyoruz.
+// Sadece tipleri alıyoruz, böylece projenin ilk yükleme boyutunu küçük tutuyoruz.
 import type { FirebaseApp } from "firebase/app";
 import type { Auth, GoogleAuthProvider } from "firebase/auth";
 import type { Firestore } from "firebase/firestore";
@@ -15,51 +15,64 @@ const firebaseConfig = {
   measurementId: "G-7KBY9V4NES"
 };
 
-// Singleton pattern: SDK'lar sadece bir kez yüklenecek
 let appInstance: FirebaseApp | null = null;
-let authInstance: Auth | null = null;
 let dbInstance: Firestore | null = null;
+let authInstance: Auth | null = null;
 let googleProviderInstance: GoogleAuthProvider | null = null;
 
-// Firebase modüllerini dinamik olarak yükleyen fonksiyon
-export const getFirebase = async () => {
-  if (appInstance && authInstance && dbInstance) {
-    return { 
-      app: appInstance, 
-      auth: authInstance, 
-      db: dbInstance, 
-      googleProvider: googleProviderInstance,
-      // Helper modülleri de döndür
-      authModule: await import("firebase/auth"),
+// Firebase App Singleton
+const getApp = async () => {
+  if (appInstance) return appInstance;
+  const { initializeApp } = await import("firebase/app");
+  appInstance = initializeApp(firebaseConfig);
+  return appInstance;
+};
+
+// Sadece Firestore modüllerini yükler (İlk açılış için kritik)
+export const getFirestoreData = async () => {
+  const app = await getApp();
+  if (dbInstance) {
+    return {
+      db: dbInstance,
       firestoreModule: await import("firebase/firestore")
     };
   }
-
-  // Paralel import (Waterfall etkisini önlemek için)
-  const [
-    { initializeApp },
-    authMod,
-    firestoreMod
-  ] = await Promise.all([
-    import("firebase/app"),
-    import("firebase/auth"),
-    import("firebase/firestore")
-  ]);
-
-  if (!appInstance) {
-    appInstance = initializeApp(firebaseConfig);
-  }
-  
-  authInstance = authMod.getAuth(appInstance);
-  dbInstance = firestoreMod.getFirestore(appInstance);
-  googleProviderInstance = new authMod.GoogleAuthProvider();
-
-  return { 
-    app: appInstance, 
-    auth: authInstance, 
-    db: dbInstance, 
-    googleProvider: googleProviderInstance,
-    authModule: authMod,
+  const firestoreMod = await import("firebase/firestore");
+  dbInstance = firestoreMod.getFirestore(app);
+  return {
+    db: dbInstance,
     firestoreModule: firestoreMod
+  };
+};
+
+// Sadece Auth modüllerini yükler (Öğretmen paneline girişte yüklenir)
+export const getAuthData = async () => {
+  const app = await getApp();
+  if (authInstance) {
+    return {
+      auth: authInstance,
+      googleProvider: googleProviderInstance,
+      authModule: await import("firebase/auth")
+    };
+  }
+  const authMod = await import("firebase/auth");
+  authInstance = authMod.getAuth(app);
+  googleProviderInstance = new authMod.GoogleAuthProvider();
+  return {
+    auth: authInstance,
+    googleProvider: googleProviderInstance,
+    authModule: authMod
+  };
+};
+
+// Geriye dönük uyumluluk için (Eski kodu bozmamak adına)
+export const getFirebase = async () => {
+  const [firestore, auth] = await Promise.all([
+    getFirestoreData(),
+    getAuthData()
+  ]);
+  return {
+    ...firestore,
+    ...auth
   };
 };

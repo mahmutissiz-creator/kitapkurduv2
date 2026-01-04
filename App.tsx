@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 
 // Lazy Firebase Loader
-import { getFirebase } from './firebaseConfig';
+import { getFirestoreData, getAuthData } from './firebaseConfig';
 
 const App: React.FC = () => {
   const [view, setView] = useState<'home' | 'teacher'>('home');
@@ -63,10 +63,12 @@ const App: React.FC = () => {
     if (firebaseRefs.current?.authModule) return firebaseRefs.current;
 
     // Auth paketleri (90KB+) sadece öğretmen paneline girerken yüklenir
-    const fb = await getFirebase();
-    firebaseRefs.current = fb;
-    setIsConnectionReady(true);
-    return fb;
+    const authData = await getAuthData();
+    firebaseRefs.current = {
+      ...firebaseRefs.current,
+      ...authData
+    };
+    return firebaseRefs.current;
   };
 
   // --- MEMOIZED HANDLERS (Strict Component Memoization için) ---
@@ -87,12 +89,14 @@ const App: React.FC = () => {
 
     runOnIdle(async () => {
       try {
-        // İlk açılışta sadece Firestore (Veriler) yüklenir
-        const fb = await getFirebase();
+        // İlk açılışta SADECE Firestore (Veriler) yüklenir
+        const firestoreData = await getFirestoreData();
         firebaseRefs.current = {
-          ...fb,
-          authModule: null, // Önden yükleme
-          auth: null
+          db: firestoreData.db,
+          firestoreModule: firestoreData.firestoreModule,
+          auth: null,
+          authModule: null,
+          googleProvider: null
         };
 
         // Sadece firestore dinleyicilerini başlatmak için yeterli
