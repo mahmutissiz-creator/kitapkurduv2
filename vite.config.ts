@@ -5,10 +5,16 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
+  esbuild: {
+    legalComments: 'none', // Lisans yorumlarını (legal comments) tamamen siler
+    drop: ['console', 'debugger'], // Log mesajlarını temizler
+  },
   build: {
     outDir: 'dist',
     sourcemap: false,
     cssCodeSplit: true,
+    target: 'esnext', // Daha kısa ve modern modül kodlaması
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: {
