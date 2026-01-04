@@ -19,8 +19,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           'firebase-auth': ['firebase/auth'],
-          'firebase-firestore': ['firebase/firestore'],
-          'firebase-app': ['firebase/app'],
+          'firebase-vendor': ['firebase/app', 'firebase/firestore'],
           'framer-vendor': ['framer-motion'],
           'ui-vendor': ['lucide-react']
         }

@@ -171,9 +171,9 @@ const App: React.FC = () => {
 
     if ('requestIdleCallback' in window) {
       // @ts-ignore
-      window.requestIdleCallback(startListeners);
+      window.requestIdleCallback(() => setTimeout(startListeners, 300));
     } else {
-      setTimeout(startListeners, 100);
+      setTimeout(startListeners, 500);
     }
 
     return () => {
