@@ -263,14 +263,8 @@ const App: React.FC = () => {
     const { auth, googleProvider, authModule } = firebaseRefs.current;
 
     try {
-      // PERFORMANS & UYUMLULUK: Mobil cihazlarda pop-up yerine yönlendirme kullan
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-      if (isMobile) {
-        await authModule.signInWithRedirect(auth, googleProvider);
-      } else {
-        await authModule.signInWithPopup(auth, googleProvider);
-      }
+      // COOP ve modern tarayıcı kısıtlamaları nedeniyle tüm cihazlarda yönlendirme (redirect) kullan
+      await authModule.signInWithRedirect(auth, googleProvider);
     } catch (error: any) {
       if (error.code === 'auth/unauthorized-domain') {
         setLoginError(`YETKİSİZ ALAN ADI: ${window.location.hostname}`);
